@@ -1,0 +1,14 @@
+streamlit
+pandas
+plotly
+numpy
+scikit-learn # If used implicitly by data_handler or analytics agent
+spacy # If used implicitly
+textblob # If used implicitly
+PyMuPDF # for fitz in file_processor.py
+python-docx # for docx in file_processor.py
+google-generativeai
+langchain-google-genai
+langchain-community
+langchain-core
+chromadb
