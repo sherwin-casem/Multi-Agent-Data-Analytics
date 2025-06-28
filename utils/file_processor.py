@@ -1,35 +1,78 @@
+# utils/file_processor.py
+
 import pandas as pd
-import fitz  # PyMuPDF
+import PyPDF2
 import docx
-import streamlit as st # Only for type hinting UploadedFile
+import io
+from typing import Union, Optional
 
 class FileProcessor:
     """
-    Handles file uploads and processing for CSV, XLSX, PDF, DOCX, and TXT formats.
+    Utility class for processing different file types (CSV, DOC, DOCX, PDF).
     """
 
-    def __init__(self, uploaded_file: st.runtime.uploaded_file_manager.UploadedFile):
-        if uploaded_file is None:
-            raise ValueError("Uploaded file cannot be None.")
-        self.uploaded_file = uploaded_file
-        self.file_type = uploaded_file.name.split('.')[-1].lower()
+    def __init__(self):
+        self.supported_formats = ['csv', 'doc', 'docx', 'pdf']
 
-    def process_file(self):
+    # --- THIS IS THE FIX ---
+    # Rename this method from 'process_file' to 'process'
+    def process(self, uploaded_file) -> Optional[Union[pd.DataFrame, str]]:
+    # --- END OF FIX ---
         """
-        Processes the uploaded file based on its type.
+        Process uploaded file based on its extension.
+        
+        Args:
+            uploaded_file: Streamlit uploaded file object
+            
+        Returns:
+            pandas.DataFrame for CSV files, str for document files, None on error
         """
-        if self.file_type == 'csv':
-            return pd.read_csv(self.uploaded_file)
-        elif self.file_type == 'xlsx':
-            return pd.read_excel(self.uploaded_file, engine='openpyxl')
-        elif self.file_type == 'txt':
-            return self.uploaded_file.read().decode('utf-8')
-        elif self.file_type == 'pdf':
-            doc = fitz.open(stream=self.uploaded_file.read(), filetype="pdf")
-            return "\n".join([page.get_text() for page in doc])
-        elif self.file_type == 'docx':
-            doc = docx.Document(self.uploaded_file)
-            return "\n".join([para.text for para in doc.paragraphs])
-        else:
-            st.error(f"Unsupported file type: {self.file_type}")
-            return None
+        try:
+            file_extension = uploaded_file.name.split('.')[-1].lower()
+            if file_extension not in self.supported_formats:
+                raise ValueError(f"Unsupported file format: {file_extension}")
+            
+            if file_extension == 'csv':
+                return self._process_csv(uploaded_file)
+            elif file_extension in ['doc', 'docx']:
+                return self._process_word_document(uploaded_file)
+            elif file_extension == 'pdf':
+                return self._process_pdf(uploaded_file)
+            else:
+                raise ValueError(f"Unsupported file format: {file_extension}")
+                
+        except Exception as e:
+            raise Exception(f"Error processing file: {str(e)}")
+
+    def _process_csv(self, uploaded_file) -> pd.DataFrame:
+        try:
+            uploaded_file.seek(0)
+            df = pd.read_csv(uploaded_file, encoding='utf-8')
+            if df.empty:
+                raise ValueError("CSV file is empty")
+            df.columns = df.columns.str.strip()
+            return df
+        except Exception as e:
+            raise Exception(f"Error processing CSV file: {str(e)}")
+
+    def _process_word_document(self, uploaded_file) -> str:
+        try:
+            doc = docx.Document(uploaded_file)
+            text_content = [p.text for p in doc.paragraphs if p.text.strip()]
+            full_text = "\n".join(text_content)
+            if not full_text.strip():
+                raise ValueError("No text content found in DOCX file")
+            return full_text
+        except Exception as e:
+            raise Exception(f"Error processing Word document: {str(e)}")
+
+    def _process_pdf(self, uploaded_file) -> str:
+        try:
+            pdf_reader = PyPDF2.PdfReader(uploaded_file)
+            text_content = [page.extract_text() for page in pdf_reader.pages if page.extract_text()]
+            full_text = "\n\n".join(text_content)
+            if not full_text.strip():
+                raise ValueError("No text content found in PDF file")
+            return full_text
+        except Exception as e:
+            raise Exception(f"Error processing PDF file: {str(e)}")
