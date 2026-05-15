@@ -1,7 +1,9 @@
-📊 Multi-Agent Data Analytics & RAG System 🤖
+# 📊 Multi-Agent Data Analytics & RAG System 🤖
+
 Welcome to the Multi-Agent Data Analytics & RAG System! This project provides an intelligent platform for analyzing both structured and unstructured data using a powerful multi-agent architecture, Retrieval-Augmented Generation (RAG), and Google's Gemini models.
 
-✨ Features
+## ✨ Features
+
 📈 Data Analysis: Summarize datasets, extract key insights, and assess data quality.
 
 📊 Dynamic Visualizations: Generate interactive charts (bar, line, scatter, pie, histogram, heatmap, etc.) based on natural language queries.
@@ -14,26 +16,27 @@ Welcome to the Multi-Agent Data Analytics & RAG System! This project provides an
 
 🗣️ Conversational Interface: Interact with the system using natural language via a Streamlit chat interface.
 
-🚀 Technology Stack
+## 🚀 Technology Stack
+
 This project is built primarily with Python and leverages the following key technologies:
 
-Framework:
+### Framework:
 
 Streamlit: For building the interactive web application interface (app.py).
 
-Large Language Models (LLM) & Embeddings:
+### Large Language Models (LLM) & Embeddings:
 
 Google Gemini 1.5 Flash: The core LLM for generating responses, insights, and explanations (agents/gemini_agent.py).
 
 GoogleGenerativeAIEmbeddings: For creating vector embeddings of text.
 
-RAG & Orchestration:
+### RAG & Orchestration:
 
 LangChain: Framework for building LLM applications, used for RAG pipeline orchestration, text splitting, and managing LLM/embedding integrations (dual_rag_agent_system.py).
 
 ChromaDB: A lightweight vector database for storing and querying text embeddings for efficient information retrieval (dual_rag_agent_system.py).
 
-Data Handling & Analysis:
+### Data Handling & Analysis:
 
 Pandas: For structured data manipulation and analysis.
 
@@ -41,13 +44,13 @@ NumPy: For numerical operations.
 
 Plotly: For creating interactive data visualizations (utils/chart_generator.py).
 
-File Processing:
+### File Processing:
 
 PyMuPDF (fitz): For PDF file processing.
 
 python-docx: For DOCX file processing.
 
-Custom Agents:
+### Custom Agents:
 
 AgentCoordinator: Orchestrates the flow between different agents and RAG components (dual_rag_agent_system.py).
 
@@ -63,30 +66,40 @@ DataHandler: Utility for data preprocessing and summarization (utils/data_handle
 
 ChartGenerator: Utility for creating Plotly charts (utils/chart_generator.py).
 
-🛠️ Setup & Installation
+## 🛠️ Setup & Installation
+
 To get this project up and running locally, follow these steps:
 
-Clone the Repository:
+### Clone the Repository:
 
+```bash
 git clone <your-repository-url>
 cd <your-repository-name>
+```
 
-Create a Virtual Environment (Recommended):
+### Create a Virtual Environment (Recommended):
 
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+```
 
-Install Dependencies:
+### Install Dependencies:
+
 Create a pyproject.toml or requirements.txt file (as discussed in previous steps). If you have pyproject.toml, you can use uv or pip with pip install -e . or pip install -r requirements.txt.
 
 Using pyproject.toml (recommended with uv):
 Ensure uv is installed (pip install uv).
 
+```bash
 uv pip install -e .
+```
 
 Or, if using requirements.txt:
 
+```bash
 pip install -r requirements.txt
+```
 
 Make sure all required libraries including google-generativeai, langchain-google-genai, langchain-community, chromadb, PyMuPDF, python-docx are listed.
 
@@ -104,14 +117,16 @@ Alternatively, when deploying to Streamlit Cloud, you'll use Streamlit's built-i
 
 In your app.py ensure you are loading the API key securely, e.g., using os.getenv("GOOGLE_API_KEY") or st.secrets.get("GOOGLE_API_KEY").
 
-▶️ How to Run the Application
+## ▶️ How to Run the Application
 Once setup is complete, you can run the Streamlit application:
 
+```bash
 streamlit run app.py
+```
 
 This will open the application in your default web browser (usually at http://localhost:8501).
 
-🚀 How to Use
+## 🚀 How to Use
 Upload Your File: On the sidebar, use the file uploader to select your CSV, XLSX, PDF, DOCX, or TXT file.
 
 Authenticate (if prompted): Enter your Google Gemini API key if you haven't set it up as an environment variable or secret.
@@ -136,7 +151,7 @@ Example: "Summarize the key findings."
 
 View Results: The system will provide textual responses and, for structured data, interactive charts.
 
-🤝 Contributions
+## 🤝 Contributions
 Contributions are welcome! If you have suggestions or find issues, please open an issue or submit a pull request on the GitHub repository.
 
 Enjoy exploring your data with the power of AI! ✨
